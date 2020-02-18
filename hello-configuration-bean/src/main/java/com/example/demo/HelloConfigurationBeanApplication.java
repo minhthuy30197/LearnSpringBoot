@@ -9,8 +9,13 @@ public class HelloConfigurationBeanApplication {
 	public static void main(String[] args) {
 		ApplicationContext context = SpringApplication.run(HelloConfigurationBeanApplication.class, args);
 
-		GirlFriend girlFriend = (GirlFriend) context.getBean("girlFriend");
+		Dress dress = (Dress) context.getBean("dress");
+		System.out.println(dress);
+		System.out.println(dress.getSize());
 
+		System.out.println("--------------------------------------");
+
+		GirlFriend girlFriend = (GirlFriend) context.getBean("girlFriend");
 		System.out.println(girlFriend);
 		System.out.println(girlFriend.dress);
 		System.out.println(girlFriend.dress.getSize());

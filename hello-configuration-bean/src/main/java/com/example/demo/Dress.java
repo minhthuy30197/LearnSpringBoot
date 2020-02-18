@@ -4,7 +4,6 @@ public class Dress {
     public int size;
 
     public Dress() {
-
     }
 
     public Dress(int size) {

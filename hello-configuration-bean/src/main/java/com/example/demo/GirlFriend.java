@@ -4,7 +4,6 @@ public class GirlFriend {
     public Dress dress;
 
     public GirlFriend() {
-
     }
 
     public GirlFriend(Dress dress) {
