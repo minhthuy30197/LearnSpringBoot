@@ -11,15 +11,15 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UserServiceImpl implements UserService{
-    @Autowired
-    private UserRepository userRepository;
+        @Autowired
+        private UserRepository userRepository;
 
-    public UserDto createUser(CreateUserRequest createUserRequest) {
-        // Kiểm tra email đã có trong hệ thống chưa
-        User check = userRepository.findByEmail(createUserRequest.getEmail());
-        if (check != null) {
-            throw new DuplicateRecordException("Email đã tồn tại trong hệ thống");
-        }
+        public UserDto createUser(CreateUserRequest createUserRequest) {
+                // Kiểm tra email đã có trong hệ thống chưa
+                User check = userRepository.findByEmail(createUserRequest.getEmail());
+                if (check != null) {
+                    throw new DuplicateRecordException("Email đã tồn tại trong hệ thống");
+                }
 
         User user = UserMapper.toUser(createUserRequest);
         user.setRole("USER");
