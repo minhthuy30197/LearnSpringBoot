@@ -1,8 +1,12 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.User;
+import com.example.demo.exception.DuplicateRecordException;
+import com.example.demo.exception.NotFoundException;
 import com.example.demo.model.dto.UserDto;
 import com.example.demo.model.mapper.UserMapper;
+import com.example.demo.model.request.CreateUserReq;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -33,10 +37,31 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getUserById(int id) {
-        UserDto user = new UserDto();
+        for (User user : users) {
+            if (user.getId() == id) {
+                return UserMapper.toUserDto(user);
+            }
+        }
 
-        // Lọc
+        throw new NotFoundException("No user found");
+    }
 
-        return user;
+    @Override
+    public UserDto createUser(CreateUserReq req) {
+        // Check email exist
+        for (User user : users) {
+            if (user.getEmail().equals(req.getEmail())) {
+               throw new DuplicateRecordException("Email already exists in the system");
+            }
+        }
+
+        // Convert CreateUserReq -> User
+        User user = UserMapper.toUser(req);
+        user.setId(users.size()+1);
+
+        // Insert user
+        users.add(user);
+
+        return UserMapper.toUserDto(user);
     }
 }
