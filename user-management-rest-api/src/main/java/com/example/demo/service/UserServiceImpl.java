@@ -6,6 +6,7 @@ import com.example.demo.exception.NotFoundException;
 import com.example.demo.model.dto.UserDto;
 import com.example.demo.model.mapper.UserMapper;
 import com.example.demo.model.request.CreateUserReq;
+import com.example.demo.model.request.UpdateUserReq;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Component;
 
@@ -63,5 +64,41 @@ public class UserServiceImpl implements UserService {
         users.add(user);
 
         return UserMapper.toUserDto(user);
+    }
+
+    @Override
+    public UserDto updateUser(UpdateUserReq req, int id) {
+        for (User user : users) {
+            if (user.getId() == id) {
+                if (!user.getEmail().equals(req.getEmail())) {
+                    // Check new email exist
+                    for (User tmp : users) {
+                        if (tmp.getEmail().equals(req.getEmail())) {
+                            throw new DuplicateRecordException("New email already exists in the system");
+                        }
+                    }
+                    user.setEmail(req.getEmail());
+                }
+                user.setName(req.getName());
+                user.setPhone(req.getPhone());
+                user.setAvatar(req.getAvatar());
+                user.setPassword(BCrypt.hashpw(req.getPassword(), BCrypt.gensalt(12)));
+                return UserMapper.toUserDto(user);
+            }
+        }
+
+        throw new NotFoundException("No user found");
+    }
+
+    @Override
+    public boolean deleteUser(int id) {
+        for (User user : users) {
+            if (user.getId() == id) {
+                users.remove(user);
+                return true;
+            }
+        }
+
+        throw new NotFoundException("No user found");
     }
 }
