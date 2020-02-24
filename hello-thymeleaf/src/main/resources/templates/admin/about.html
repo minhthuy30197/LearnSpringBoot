@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{/admin/main_layout :: main-fragment(
+                                                ~{:: title},
+                                                ~{:: #about-static-resources},
+                                                ~{:: #about-main-content}
+                                               )}">
+
+<head>
+<title>Giới thiệu</title>
+
+<th:block id="about-static-resources">
+
+	<link rel="stylesheet" type="text/css" th:href="@{/css/home.css}" />
+
+</th:block>
+</head>
+<body>
+	<div id="about-main-content">
+		<h2>Đây là trang giới thiệu</h2>
+	</div>
+</body>
+</html>
+
+
+

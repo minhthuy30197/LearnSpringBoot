@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+	th:fragment="main-fragment(title, otherStaticResources, mainContent)">
+<head>
+<meta charset="UTF-8" />
+<title th:replace="${title}">Page Title</title>
+
+
+<link rel="stylesheet" type="text/css" th:href="@{/css/layout.css}"/>
+
+<th:block th:replace="${otherStaticResources} ?: ~{}"></th:block>
+
+</head>
+<body>
+
+	<!-- HEADER -->
+	<header>
+		Đây là header
+	</header>
+
+	<section>
+		<!-- MENU -->
+		<nav>
+			<ul>
+				<li><a href="/admin">Giới thiệu</a></li>
+				<li><a href="/admin/products">Sản phẩm</a></li>
+				<li><a href="/admin/blog">Blog</a></li>
+			</ul>
+		</nav>
+
+		<article th:insert="${mainContent} ?: ~{}">
+			<p>Nội dung chính của trang</p>
+		</article>
+	</section>
+
+	<!-- FOOTER -->
+	<footer>
+		Đây là footer
+	</footer>
+</body>
+</html>

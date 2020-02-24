@@ -19,9 +19,25 @@ public class ThymeleafController {
     // Model là một object của Spring Boot, được gắn vào trong mọi request
     @GetMapping("/about")
     public String index(Model model) {
-        model.addAttribute("name", "Thuy");
+        model.addAttribute("name", "Thu");
 
         // Trả về file hello.html cùng với thông tin trong object Model
         return "about";
+    }
+
+
+    @GetMapping("/admin")
+    public String admin() {
+        return "/admin/about";
+    }
+
+    @GetMapping("/admin/products")
+    public String product() {
+        return "/admin/product";
+    }
+
+    @GetMapping("/admin/blog")
+    public String blog() {
+        return "/admin/blog";
     }
 }
