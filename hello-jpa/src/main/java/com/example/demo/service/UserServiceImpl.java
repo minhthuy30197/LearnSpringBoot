@@ -51,9 +51,9 @@ public class UserServiceImpl implements UserService {
         }
 
         user = UserMapper.toUser(req);
-        User newUser = userRepository.save(user);
+        userRepository.save(user);
 
-        return UserMapper.toUserDto(newUser);
+        return UserMapper.toUserDto(user);
     }
 
     @Override

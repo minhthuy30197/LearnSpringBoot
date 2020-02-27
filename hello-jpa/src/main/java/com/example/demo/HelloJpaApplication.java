@@ -1,19 +1,11 @@
 package com.example.demo;
 
-import com.example.demo.entity.Document;
-import com.example.demo.entity.IdentityCard;
-import com.example.demo.entity.Order;
-import com.example.demo.entity.Person;
-import com.example.demo.repository.DocumentRepository;
-import com.example.demo.repository.IdentityCardRepository;
-import com.example.demo.repository.OrderRepository;
-import com.example.demo.repository.PersonRepository;
+import com.example.demo.entity.*;
+import com.example.demo.repository.*;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import javax.print.Doc;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -30,6 +22,7 @@ public class HelloJpaApplication implements CommandLineRunner {
 	private IdentityCardRepository identityCardRepository;
 	private OrderRepository orderRepository;
 	private DocumentRepository documentRepository;
+	private CarRepository carRepository;
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -79,5 +72,19 @@ public class HelloJpaApplication implements CommandLineRunner {
 
 		Optional<Document> rs2 = documentRepository.findById(1);
 		System.out.println(rs2.get().toString());
+
+		Car car = new Car();
+		car.setName("Ford Tourneo Titanium");
+		ArrayList<String> images = new ArrayList<String>();
+		images.add("img1.jpg");
+		images.add("img2.jpg");
+		car.setImages(images);
+		Car.Engine engine = new Car.Engine(220, "2.0 ecoboots");
+		car.setEngine(engine);
+
+		carRepository.save(car);
+
+		Optional<Car> getCar = carRepository.findById(1);
+		System.out.println(getCar.get().toString());
 	}
 }
