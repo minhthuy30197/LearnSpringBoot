@@ -9,6 +9,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 @Entity
 @Table(name="document")
 public class Document {
@@ -25,5 +26,6 @@ public class Document {
             joinColumns = @JoinColumn(name = "person_id"),
             inverseJoinColumns = @JoinColumn(name = "document_id")
     )
+    @ToString.Exclude
     private List<Person> authors;
 }

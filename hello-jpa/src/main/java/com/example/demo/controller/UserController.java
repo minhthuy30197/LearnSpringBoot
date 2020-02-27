@@ -30,7 +30,7 @@ public class UserController {
     private static String UPLOAD_DIR = System.getProperty("user.home") + "/upload";
 
     @Autowired
-    public UserService userService;
+    private UserService userService;
 
     @ApiOperation(value = "Get list user", response = UserDto.class, responseContainer = "List")
     @ApiResponses({

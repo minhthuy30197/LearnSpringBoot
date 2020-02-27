@@ -9,6 +9,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 @Entity
 @Table(name="person")
 public class Person {
@@ -26,13 +27,11 @@ public class Person {
     @Column(name="password")
     private String password;
 
-    @OneToOne // Đánh dấu có mỗi quan hệ 1-1 với IdentityCard
-    @JoinColumn(name = "identity_card_id") // Liên kết với nhau qua khóa ngoại identity_card_id
+    @OneToOne
+    @JoinColumn(name = "identity_card_id")
     private IdentityCard identityCard;
 
     @OneToMany(mappedBy = "person")
+    @ToString.Exclude
     private List<Order> orders;
-
-    @ManyToMany(mappedBy = "authors")
-    private List<Document> documents;
 }
