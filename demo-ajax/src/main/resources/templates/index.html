@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Hello World</title>
+</head>
+<body>
+	<button id="btn-get-list">Reload danh sách user</button>
+	<table border="1" style="margin:10px 0px">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Họ tên</th>
+				<th>Email</th>
+				<th>Phone</th>
+				<th>Avatar</th>
+				<th>Birthday</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody class="list-user">
+			<tr th:each="user : ${users}" th:data-id="${user.id}">
+				<td th:text="${user.id}"></td>
+				<td th:text="${user.name}"></td>
+				<td th:text="${user.email}"></td>
+				<td th:text="${user.phone}"></td>
+				<td th:text="${user.avatar} ? ${user.avatar}:''"></td>
+				<td th:text="${user.birthday} ? ${user.birthday}:''"></td>
+				<td>
+					<button th:onclick="'deleteUser('+${user.id}+')'">Xóa</button>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<form>
+		<label for="fname">Họ tên:</label><br>
+		<input type="text" id="fname" name="fname"><br>
+		<label for="femail">Email:</label><br>
+		<input type="email" id="femail" name="femail"><br>
+		<label for="fphone">Phone:</label><br>
+		<input type="text" id="fphone" name="fphone"><br>
+		<label for="fpassword">Password:</label><br>
+		<input type="password" id="fpassword" name="fpassword"><br>
+		<br>
+		<button id="btn-add-new">Tạo mới</button>
+	</form>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			hello();
+        });
+
+		function hello() {
+			console.log("Hello World");
+		};
+
+		function insertNewUser(user) {
+			$('.list-user').append(`
+			     <tr data-id="${user.id}">
+					<td>${user.id}</td>
+					<td>${user.name}</td>
+					<td>${user.email}</td>
+					<td>${user.phone}</td>
+					<td>${user.avatar}</td>
+					<td>${user.birthday}</td>
+					<td>
+						<button onclick="deleteUser(${user.id})">Xóa</button>
+					</td>
+				</tr>
+			`)
+		}
+
+		function deleteUser(id) {
+			$.ajax({
+				url: 'http://localhost:8080/users/'+id,
+				type: "DELETE",
+				error: function(data) {
+				    console.log(data)
+				},
+				success: function(data) {
+				    alert("Xóa thành công")
+				    $(".list-user tr[data-id='"+id+"']").remove()
+				}
+			});	
+			return false;
+		};
+				
+		$('#btn-get-list').click(function() {
+			$.ajax({
+			   	url: 'http://localhost:8080/users',
+			   	type: 'GET',
+			   	error: function(data) {
+			   		alert(data.responseJSON.message)
+			   	},
+			   	success: function(data) {
+			   	    $('.list-user').html("")
+			     	for (user of data) {
+			     		insertNewUser(user)
+			     	}
+			   	}
+			});	
+		})
+
+		$('#btn-add-new').click(function() {
+			event.preventDefault()
+			name = $('#fname').val()
+			phone = $('#fphone').val()
+			email = $('#femail').val()
+			password = $('#fpassword').val()
+
+			// TODO: Validate thông tin ở đây
+
+			req = {
+				name: name,
+				email: email,
+				phone: phone,
+				password: password
+			}
+			console.log(req)
+			var myJSON = JSON.stringify(req);
+			console.log(myJSON)
+			$.ajax({
+			   	url: 'http://localhost:8080/users',
+			   	type: 'POST',
+			   	data: myJSON,
+			   	dataType: "json",
+			   	contentType: "application/json; charset=utf-8",
+			   	error: function(data) {
+			   		alert(data.responseJSON.message)
+			   	},
+			   	success: function(data) {
+			   		alert("Tạo mới thành công")
+			   	    insertNewUser(data)
+			   	    $('#fname').val('')
+			   	    $('#femail').val('')
+			   	    $('#fphone').val('')
+			   	    $('#fpassword').val('')
+			   	}
+			});
+		})
+	</script>
+</body>
+</html>
+
