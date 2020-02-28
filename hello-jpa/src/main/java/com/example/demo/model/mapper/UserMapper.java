@@ -28,6 +28,7 @@ public class UserMapper {
         // Hash password using BCrypt
         String hash = BCrypt.hashpw(req.getPassword(), BCrypt.gensalt(12));
         user.setPassword(hash);
+        user.setRole("USER");
 
         return user;
     }
