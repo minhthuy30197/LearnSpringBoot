@@ -30,4 +30,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Modifying
     @Query(value = "UPDATE user SET name = ?1, avatar = ?2, phone = ?3, birthday = ?4 WHERE id = ?5", nativeQuery = true)
     public void updateProfile(String name, String avatar, String phone, Date birthday, int id);
+
+    @Query(nativeQuery = true, name = "getUserInfo")
+    User getUserInfo(int id);
 }

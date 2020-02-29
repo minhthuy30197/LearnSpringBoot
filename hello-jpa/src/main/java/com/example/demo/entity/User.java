@@ -7,6 +7,10 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
+@NamedNativeQuery(
+        name = "getUserInfo",
+        query = "SELECT * FROM user WHERE id = ?1",
+        resultClass = User.class)
 @Getter
 @Setter
 @AllArgsConstructor
