@@ -10,6 +10,9 @@ import com.example.demo.model.request.CreateUserReq;
 import com.example.demo.model.request.UpdateUserReq;
 import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +32,12 @@ public class UserServiceImpl implements UserService {
             rs.add(UserMapper.toUserDto(user));
         }
 
+        return rs;
+    }
+
+    @Override
+    public Page<User> findUserLikeName(String name, int page) {
+        Page<User> rs = userRepository.findUserByName(name, PageRequest.of(page,10, Sort.by("id").descending()));
         return rs;
     }
 

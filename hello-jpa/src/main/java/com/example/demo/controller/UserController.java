@@ -1,16 +1,21 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.Car;
+import com.example.demo.entity.User;
 import com.example.demo.exception.NotFoundException;
 import com.example.demo.model.dto.UserDto;
 import com.example.demo.model.request.CreateUserReq;
 import com.example.demo.model.request.UpdateUserReq;
 import com.example.demo.model.request.UploadFile;
+import com.example.demo.repository.CarRepository;
 import com.example.demo.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.UrlResource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +27,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.net.MalformedURLException;
 import java.util.List;
+import java.util.Optional;
 
 @RequestMapping("/users")
 @RestController
@@ -38,6 +44,23 @@ public class UserController {
     @GetMapping("")
     public ResponseEntity<?> getListUser() {
         List<UserDto> result = userService.getListUser();
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    @ApiOperation(value = "Get list user with paging", response = User.class, responseContainer = "List")
+    @ApiResponses({
+            @ApiResponse(code=500,message = "")
+    })
+    @GetMapping("/like-name")
+    public ResponseEntity<?> getListUserLikeName(@RequestParam(required = false) Integer page) {
+        int currPage;
+        if (page == null) {
+            currPage = 0;
+        } else {
+            currPage = page - 1;
+        }
+        Page<User> result = userService.findUserLikeName("John", currPage);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
