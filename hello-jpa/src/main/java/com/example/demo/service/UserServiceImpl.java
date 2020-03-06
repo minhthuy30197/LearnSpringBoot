@@ -95,4 +95,24 @@ public class UserServiceImpl implements UserService {
             throw new InternalServerException("Database error. Can't delete user");
         }
     }
+
+    @Override
+    public void testTransaction() {
+        User user1 = new User();
+        user1.setEmail("mongmo@gmail.com");
+        user1.setName("Nguyễn Thị Mộng Mơ");
+        user1.setPassword("123456789");
+        user1.setPhone("0916125984");
+        user1.setRole("USER");
+
+        User user2 = new User();
+        user2.setEmail("lunglinh@gmail.com");
+        user2.setName("Phan Thị Lung Linh");
+        user2.setPassword("abc123");
+        user2.setPhone("098765432100000");
+        user2.setRole("USER");
+
+        userRepository.save(user1);
+        userRepository.save(user2);
+    }
 }

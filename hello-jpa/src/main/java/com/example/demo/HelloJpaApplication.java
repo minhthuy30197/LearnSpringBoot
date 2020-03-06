@@ -1,7 +1,11 @@
 package com.example.demo;
 
 import com.example.demo.entity.*;
+import com.example.demo.model.dto.UserDto;
+import com.example.demo.model.request.CreateUserReq;
 import com.example.demo.repository.*;
+import com.example.demo.service.UserService;
+import com.example.demo.service.UserServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -23,9 +27,11 @@ public class HelloJpaApplication implements CommandLineRunner {
 	private OrderRepository orderRepository;
 	private DocumentRepository documentRepository;
 	private CarRepository carRepository;
+	private UserServiceImpl userService;
 
 	@Override
 	public void run(String... args) throws Exception {
+		// Test insert dữ liệu vào các bảng có quan hệ
 //		// Tạo object IdentityCard
 //		IdentityCard idc = new IdentityCard();
 //		idc.setId("ABC123");

@@ -6,6 +6,7 @@ import com.example.demo.model.request.CreateUserReq;
 import com.example.demo.model.request.UpdateUserReq;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -22,4 +23,7 @@ public interface UserService {
     public UserDto updateUser(UpdateUserReq req, int id);
 
     public void deleteUser(int id);
+
+    @Transactional
+    public void testTransaction();
 }
