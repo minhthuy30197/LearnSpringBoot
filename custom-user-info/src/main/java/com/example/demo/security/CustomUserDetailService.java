@@ -13,6 +13,7 @@ public class CustomUserDetailService implements UserDetailsService {
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         if (s.equals("whoami")) {
             String password = new BCryptPasswordEncoder().encode("123456");
+            // Để truy cập vào /profile cần đổi thành ADMIN
             return User.withUsername("whoami").password(password).roles("USER").build();
         } else {
             throw new UsernameNotFoundException(s + " does not exist");

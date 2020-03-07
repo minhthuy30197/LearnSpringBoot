@@ -1,8 +1,11 @@
 package com.example.demo.controller;
 
+import com.example.demo.security.IsAdmin;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import javax.annotation.security.RolesAllowed;
 
 @RestController
 public class MyController {
@@ -14,5 +17,23 @@ public class MyController {
     @GetMapping("/profile")
     public ResponseEntity<?> getProfile() {
         return ResponseEntity.ok("Profile");
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/blog")
+    public ResponseEntity<?> blog() {
+        return ResponseEntity.ok("Blog");
+    }
+
+    @RolesAllowed("ADMIN")
+    @GetMapping("/shop")
+    public ResponseEntity<?> shop() {
+        return ResponseEntity.ok("Shop");
+    }
+
+    @IsAdmin
+    @GetMapping("/home")
+    public ResponseEntity<?> home() {
+        return ResponseEntity.ok("Home");
     }
 }
