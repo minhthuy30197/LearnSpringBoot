@@ -3,6 +3,7 @@ package com.example.demo.model.mapper;
 import com.example.demo.entity.User;
 import com.example.demo.model.dto.UserDto;
 import com.example.demo.model.request.CreateUserReq;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 
 public class UserMapper {
     public static UserDto toUserDto(User user) {
