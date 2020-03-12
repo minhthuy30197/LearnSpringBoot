@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class ApiAuthorizationFilter extends BasicAuthenticationFilter {
-
     ApiAuthorizationFilter(AuthenticationManager authenticationManager) {
         super(authenticationManager);
     }
@@ -24,6 +23,7 @@ public class ApiAuthorizationFilter extends BasicAuthenticationFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         // Kiểm tra session
+        System.out.println("----------: "+ request.getSession());
         UserSession userSession = (UserSession) request.getSession().getAttribute("TECHMASTER_SESSION");
         if (userSession == null) {
             chain.doFilter(request, response);
