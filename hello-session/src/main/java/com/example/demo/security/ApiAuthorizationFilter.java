@@ -1,54 +1,46 @@
 package com.example.demo.security;
 
-import com.example.demo.model.dto.UserSession;
-import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 
-public class ApiAuthorizationFilter extends BasicAuthenticationFilter {
-    ApiAuthorizationFilter(AuthenticationManager authenticationManager) {
-        super(authenticationManager);
-    }
+@Component
+public class ApiAuthorizationFilter extends OncePerRequestFilter {
+    @Autowired
+    private UserDetailsService userDetailsService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-        // Kiểm tra session
-        System.out.println("----------: "+ request.getSession());
-        UserSession userSession = (UserSession) request.getSession().getAttribute("TECHMASTER_SESSION");
-        if (userSession == null) {
+        // Lấy thông tin session
+        String userEmail = (String) request.getSession().getAttribute("TECHMASTER_SESSION");
+
+        // Tạo object Authentication
+        UsernamePasswordAuthenticationToken authentication = getAuthentication(userEmail);
+        if (authentication == null) {
             chain.doFilter(request, response);
             return;
         }
 
-        // Thêm object Authentication vào SecurityContext
-        // Controller có thể lấy ra thông tin user đang đăng nhập từ đây để sử dụng
-        UsernamePasswordAuthenticationToken authenticationToken = getAuthentication(userSession);
-        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+        // Xác thực thành công, lưu object Authentication vào SecurityContextHolder
+        SecurityContextHolder.getContext().setAuthentication(authentication);
         chain.doFilter(request, response);
     }
 
-    private UsernamePasswordAuthenticationToken getAuthentication(UserSession userSession) {
-        // Lấy thông tin userId
-        int userId = userSession.getId();
+    private UsernamePasswordAuthenticationToken getAuthentication(String userEmail) {
+        if (userEmail == null) {
+            return null;
+        }
 
-        // Lấy thông tin role
-        // Convert role thành mảng GrantedAuthority để authentication manager kiểm tra
-        // Trong ví dụ này user chỉ có 1 role
-        ArrayList<GrantedAuthority> authorities = new ArrayList<>();
-        GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_"+userSession.getRole());
-        authorities.add(authority);
-
-        // Trả về đối tượng Authentication chứa thông tin username, thông tin đăng nhập, tập quyền
-        return new UsernamePasswordAuthenticationToken(userId, userSession, authorities);
+        UserDetails user = userDetailsService.loadUserByUsername(userEmail);
+        return new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
     }
 }

@@ -2,7 +2,6 @@ package com.example.demo.model.mapper;
 
 import com.example.demo.entity.User;
 import com.example.demo.model.dto.UserDto;
-import com.example.demo.model.dto.UserSession;
 import com.example.demo.model.request.CreateUserReq;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
@@ -30,14 +29,5 @@ public class UserMapper {
         user.setRole("USER");
 
         return user;
-    }
-
-    public static UserSession toUserSession(User user) {
-        UserSession userSession = new UserSession();
-        userSession.setEmail(user.getEmail());
-        userSession.setId(user.getId());
-        userSession.setRole(user.getRole());
-
-        return userSession;
     }
 }
