@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Basic object</title>
+</head>
+<body>
+    <h4>Language is <span th:text="${#locale.language}"></span></h4>
+    <h4>Request URI <span th:text="${#request.requestURI}"></span></h4>
+    <h4>Request URL <span th:text="${#request.requestURL}"></span></h4>
+    <h3 th:utext="${#session.getAttribute('mygreeting')}"></h3>
+
+    <th:block th:with="now = ${#dates.createNow()}">
+        <span th:utext="${now}"></span>
+        <h4>#dates.format(now, 'yyyy-MM-dd HH:mm:ss'): <span th:utext="${#dates.format( now , 'yyyy-MM-dd HH:mm:ss')}">Date String</span></h4>
+        <h4>#dates.year(now): <span th:utext="${#dates.year(now)}">Year</span></h4>
+        <h4>#dates.month(now): <span th:utext="${#dates.month(now)}">Month</span></h4>
+    </th:block>
+
+    <th:block th:with="num = 12345.987654">
+        <h4>num</h4>
+        <span th:utext="${num}">Number</span>
+        <h4>${#numbers.formatInteger(num,3)}</h4>
+        <span th:utext="${#numbers.formatInteger(num,3)}">Number</span>
+        <h4>${#numbers.formatInteger(num,3,'POINT')}</h4>
+        <span th:utext="${#numbers.formatInteger(num,3,'POINT')}">Number</span>
+        <h4>${#numbers.formatDecimal(num,3,'POINT',2,'COMMA')}</h4>
+        <span th:utext="${#numbers.formatDecimal(num,3,'POINT',2,'COMMA')}">Number</span>
+    </th:block>
+</body>
+</html>
