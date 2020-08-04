@@ -12,10 +12,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import static org.mockito.ArgumentMatchers.any;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -41,6 +41,7 @@ public class UserControllerTest {
         Mockito.when(userService.getListUser()).thenReturn(users);
 
         mvc.perform(get("/users").contentType(MediaType.APPLICATION_JSON)) // Thực hiện GET REQUEST
+                .andDo(print())
                 .andExpect(status().isOk()) // Mong muốn Server trả về status 200
                 .andExpect(jsonPath("$", hasSize(5))) // Hi vọng server trả về List độ dài 5
                 .andExpect(jsonPath("$[0].id", is(1))) // Hi vọng phần tử trả về đầu tiên có id = 1
@@ -66,7 +67,7 @@ public class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()) // Mong muốn Server trả về status 200
                 .andExpect(jsonPath("$.id", is(1))) // Hi vọng trả về object có id = 1
-                .andDo(MockMvcResultHandlers.print()); // Log nội dung request, response để kiểm tra
+                .andDo(print()); // Log nội dung request, response để kiểm tra
     }
 
     private static String asJsonString(final Object obj) {

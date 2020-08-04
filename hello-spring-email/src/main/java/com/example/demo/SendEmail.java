@@ -7,6 +7,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.thymeleaf.context.Context;
+
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.File;
@@ -72,4 +74,30 @@ public class SendEmail {
 
         return "Email Sent!";
     }
+
+    @GetMapping("/send-template-email")
+    public String sendTemplateEmail() throws MessagingException {
+        // Create a Mime MailMessage.
+        MimeMessage message = emailSender.createMimeMessage();
+
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+        helper.setTo("abc@gmail.com");
+        helper.setSubject("Test Template Email");
+
+        // Prepare the evaluation context
+        final Context context = new Context();
+        context.setVariable("name", "Bui Nhu Lac");
+        context.setVariable("project_name", "spring-email-with-thymeleaf Demo");
+
+        // Create the HTML body using Thymeleaf
+        final String htmlContent = SpringMailConfig.getTemplateEngine().process("mail-template.html", context);
+        message.setContent(htmlContent, "text/html");
+
+        // Send Message!
+        emailSender.send(message);
+
+        return "Email Sent!";
+    }
+
 }
