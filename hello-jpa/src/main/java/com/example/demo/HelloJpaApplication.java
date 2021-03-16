@@ -10,10 +10,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+
+import java.util.*;
 
 @SpringBootApplication
 @AllArgsConstructor
@@ -28,9 +26,23 @@ public class HelloJpaApplication implements CommandLineRunner {
 	private DocumentRepository documentRepository;
 	private CarRepository carRepository;
 	private UserServiceImpl userService;
+	private CategoryRepository categoryRepository;
+	private CourseRepository courseRepository;
 
 	@Override
 	public void run(String... args) throws Exception {
+		courseRepository.deleteAll();
+		categoryRepository.deleteAll();
+
+		Category category1 = Category.builder().name("KHTN").build();
+		Category category2 = Category.builder().name("XH").build();
+		categoryRepository.saveAll(Arrays.asList(category1, category2));
+
+		Course course1 = Course.builder().title("Toan").category(category1).build();
+		Course course2 = Course.builder().title("Hoa").category(category1).build();
+		Course course3 = Course.builder().title("Van").category(category1).build();
+		courseRepository.saveAll(Arrays.asList(course1, course2, course3));
+
 		// Test insert dữ liệu vào các bảng có quan hệ
 //		// Tạo object IdentityCard
 //		IdentityCard idc = new IdentityCard();
