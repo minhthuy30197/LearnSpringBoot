@@ -17,5 +17,10 @@ public class TestController {
   public ResponseEntity<?> sendSMS(@RequestBody SendSMSRequest sendSMSRequest) {
     return ResponseEntity.ok(notificationService.sendSMS(sendSMSRequest.getPhone(), sendSMSRequest.getMessage()));
   }
+
+  @PostMapping("/voice-otp")
+  public ResponseEntity<?> sendVoiceOTP(@RequestBody SendSMSRequest sendSMSRequest) {
+    return ResponseEntity.ok(notificationService.sendVoiceOTP(sendSMSRequest.getPhone(), sendSMSRequest.getMessage()));
+  }
 }
 
